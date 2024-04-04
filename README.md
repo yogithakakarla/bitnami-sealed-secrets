@@ -39,25 +39,32 @@ Next, install the sealed-secrets/sealed-secrets chart, using Helm (notice that a
 
 HELM_CHART_VERSION="2.4.0"
 
+```
 helm install sealed-secrets-controller sealed-secrets/sealed-secrets --version "${HELM_CHART_VERSION}" \
   --namespace sealed-secrets \
   --create-namespace \
   -f "06-kubernetes-secrets/assets/manifests/sealed-secrets-values-v${HELM_CHART_VERSION}.yaml"
+```
 
 Notes:
 
 A specific version for the Helm chart is used. In this case 2.4.0 is picked, which maps to the 0.18.1 version of the application. It’s good practice in general, to lock on a specific version. This helps to have predictable results, and allows versioning control via Git.
 You will want to restrict access to the sealed-secrets namespace for other users that have access to your DOKS cluster, to prevent unauthorized access to the private key (e.g. use RBAC policies).
 Next, list the deployment status for Sealed Secrets controller (the STATUS column value should be deployed):
-
+```
 helm ls -n sealed-secrets
+```
+
 The output looks similar to:
 
 NAME                            NAMESPACE       REVISION        UPDATED                                 STATUS          CHART                  APP VERSION
 sealed-secrets-controller       sealed-secrets  1               2021-10-04 18:25:03.594564 +0300 EEST   deployed        sealed-secrets-2.4.0   v0.18.1
 Finally, inspect the Kubernetes resources created by the Sealed Secrets Helm deployment:
 
+```
 kubectl get all -n sealed-secrets
+```
+
 The output looks similar to (notice the status of the sealed-secrets-controller pod and service - must be UP and Running):
 
 NAME                                             READY   STATUS    RESTARTS   AGE
